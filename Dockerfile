@@ -1,12 +1,13 @@
 FROM golang:1.10-alpine
 
-RUN apk add --no-cache gcc musl-dev git openssl bzr \ 
+RUN apk add --no-cache make gcc musl-dev git openssl bzr \ 
     && go get -u github.com/golang/dep/cmd/dep
 
-RUN go get -u github.com/smartcontractkit/chainlink
+RUN go get github.com/smartcontractkit/chainlink
 
 WORKDIR /go/src/github.com/smartcontractkit/chainlink
-RUN dep ensure
+RUN git pull
+RUN make install
 RUN go build -o /bin/chainlink
 
 RUN rm -rf /go/src
